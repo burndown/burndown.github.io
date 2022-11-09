@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    
+
+<script>!function(){var e=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches,t=localStorage.getItem("use-color-scheme")||"auto";("dark"===t||e&&"light"!==t)&&document.documentElement.classList.toggle("dark",!0)}()</script>
+
+<meta charset="utf-8" >
+
+<title>OpenWrt X64 编译</title>
+<meta name="keywords" content="OpenWrt X64 编译, Myblog">
+<meta name="description" content="本文介绍两种OpenWrt固件编译的方式，分别是本地 Ubuntu VM 编译和 Github Action 编译。
+本文以 Lean 和 Kenzok8 的库为基础进行编译，编译过程选择了一些自己常用软件包，并加了一些自己的配置文件。本地">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<link rel="shortcut icon" href="/favicon.ico">
+<link rel="stylesheet" href="/style/main.css">
+
+
+<link rel="stylesheet" href="/style/jquery.fancybox.min.css">
+
+
+
+
+
+
+
+  <meta name="generator" content="Hexo 6.3.0"></head>
+  <body>
+    <div id="app" class="main">
+
+<div class="site-header-container">
+  <div class="site-header">
+    <div class="left">
+      <a href="https://burndown.github.io">
+        <img class="avatar" src="/images/avatar.png" alt="" width="32px" height="32px">
+      </a>
+      <a href="https://burndown.github.io">
+        <h1 class="site-title">Myblog</h1>
+      </a>
+    </div>
+    <div class="right">
+        <i class="icon menu-switch icon-menu-outline" ></i>
+    </div>
+  </div>
+</div>
+
+<div class="menu-container" style="height: 0;opacity: 0;">
+<nav class="menu-list">
+  
+    
+      <a href="/" class="menu purple-link">
+        首页
+      </a>
+    
+  
+    
+      <a href="/tags" class="menu purple-link">
+        标签
+      </a>
+    
+  
+    
+      <a href="/archives" class="menu purple-link">
+        归档
+      </a>
+    
+  
+    
+      <a href="/about" class="menu purple-link">
+        关于
+      </a>
+    
+  
+</nav>
+</div>
+
+
+
+  <div class="content-container">
+    <div class="post-detail">
+      
+      <h2 class="post-title">OpenWrt X64 编译</h2>
+      <div class="post-info post-detail-info">
+        <span><i class="icon icon-calendar-outline"></i> 2022-11-09</span>
+        
+      </div>
+      <div class="post-content-wrapper">
+        <div class="post-content">
+          <p>本文介绍两种OpenWrt固件编译的方式，分别是本地 Ubuntu VM 编译和 Github Action 编译。</p>
+<p>本文以 Lean 和 Kenzok8 的库为基础进行编译，编译过程选择了一些自己常用软件包，并加了一些自己的配置文件。本地编译流程按照 Lean 的<a target="_blank" rel="noopener" href="https://github.com/coolsnowwolf/lede">说明</a>，Github Action 编译按照 <a target="_blank" rel="noopener" href="https://p3terx.com/archives/build-openwrt-with-github-actions.html">P3TERX</a> 的说明。</p>
+<p>两种方式没有本质的区别，区别在于，一个是本地编译，需要一台 Ubuntu 电脑或者 VM 和良好的网络。一个是在 Github 编译，需要 Github 账号。</p>
+<h2 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h2><h3 id="OpenWrt-库"><a href="#OpenWrt-库" class="headerlink" title="OpenWrt 库"></a>OpenWrt 库</h3><p>下边三个库里包含了我们需要的软件包。Lean 的库提供里 OpenWrt 的源码，Kenzok8 和 Small 提供了很多额外的软件，比如 DDNS, Passwall 等。</p>
+<blockquote>
+<p>Lean: <a target="_blank" rel="noopener" href="https://github.com/coolsnowwolf/lede">https://github.com/coolsnowwolf/lede</a></p>
+<p>Kenzok8: <a target="_blank" rel="noopener" href="https://github.com/kenzok8/openwrt-packages">https://github.com/kenzok8/openwrt-packages</a></p>
+<p>small: <a target="_blank" rel="noopener" href="https://github.com/kenzok8/small">https://github.com/kenzok8/small</a></p>
+</blockquote>
+<p>这三个库是放在 feed.conf.default 里的。建议先从 Github Clone Lean的库，然后把Kenzok8 和 Small 加进去。 feed.conf.default 完整文件如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">heigao@heigao-S:~/lede$ <span class="built_in">cat</span> feeds.conf.default</span><br><span class="line"></span><br><span class="line">src-git packages https://github.com/coolsnowwolf/packages</span><br><span class="line">src-git luci https://github.com/coolsnowwolf/luci</span><br><span class="line">src-git routing https://github.com/coolsnowwolf/routing</span><br><span class="line">src-git telephony https://git.openwrt.org/feed/telephony.git</span><br><span class="line">src-git kenzo https://github.com/kenzok8/openwrt-packages</span><br><span class="line">src-git small https://github.com/kenzok8/small</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="软件包"><a href="#软件包" class="headerlink" title="软件包"></a>软件包</h2><p>我的软件包：</p>
+<ul>
+<li>luci-app-aliddns</li>
+<li>luci-app-aliyundrive-webdav</li>
+<li>luci-app-accesscontrol</li>
+<li>luci-app-aliddns</li>
+<li>luci-app-passwall</li>
+<li>luci-app-udpxy</li>
+<li>luci-app-upnp</li>
+<li>luci-app-wireguard</li>
+</ul>
+<p>记得添加IPv6 支持</p>
+<ul>
+<li>ipv6helper</li>
+</ul>
+<h2 id="编译"><a href="#编译" class="headerlink" title="编译"></a>编译</h2><h3 id="本地Ubuntu-模式"><a href="#本地Ubuntu-模式" class="headerlink" title="本地Ubuntu 模式"></a>本地Ubuntu 模式</h3><p>跟着 Lean OpenWrt 库里的<a target="_blank" rel="noopener" href="https://github.com/coolsnowwolf/lede">说明</a>操作就好。</p>
+<p>注意事项：</p>
+<ul>
+<li>如果后续还有可能编译，记得给 Ubuntu VM 划分的磁盘大点，不然编译几次就没空间了 </li>
+<li>准备好科学环境，不然从 Github 上拉取源码会比较费劲</li>
+<li>拉取 Lean 的 代码后，记得在 feed.conf.default 里添加 Kenzo 和 Small 的库</li>
+<li>选择镜像的格式，根据自己的情况选择: leagcy or EFI </li>
+<li>Luci 有默认选项，包含了很多APP，可以根据个人喜欢勾掉，自己手动选择</li>
+<li>ssrplus 可能和 Passwall 有冲突，选择一个即可</li>
+<li>可以在lede 文件夹下创建 files，把自己想预加载的配置文件放进去，但是我这次没有尝试</li>
+</ul>
+<p>漫长的等待后，就可以去 ~&#x2F;lede&#x2F;bin&#x2F;targets&#x2F;x86&#x2F;64 下看到编译好的固件了。</p>
+<p><img src="/assets/image-20220804161745057.png" alt="image-20220804161745057"></p>
+<h3 id="Github-编译模式"><a href="#Github-编译模式" class="headerlink" title="Github 编译模式"></a>Github 编译模式</h3><p>编译过程按照 P3TERX 的<a target="_blank" rel="noopener" href="https://p3terx.com/archives/build-openwrt-with-github-actions.html">说明</a></p>
+<p>简明步骤如下：</p>
+<ol>
+<li><p>以 P3TERX <a target="_blank" rel="noopener" href="https://github.com/P3TERX/Actions-OpenWrt">Action-OpenWrt</a> 为模板创建一个自己的 Action。</p>
+</li>
+<li><p>把自己本地生成的 <strong>.config</strong> 文件上传到根目录里</p>
+</li>
+<li><p>修改 <strong>diy-part1.sh</strong> 把 kenzo 和 small 库加进去 </p>
+</li>
+<li><p>去 Action 里 执行 <strong>Build OpenWrt</strong></p>
+</li>
+<li><p>不用执行 <strong>update-checker</strong></p>
+<p>漫长的等待后，就可以去 Action 页面下载编译好的固件了。</p>
+<p><img src="/assets/image-20220804161722115.png" alt="image-20220804161722115"></p>
+</li>
+</ol>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>Ubuntu VM 编译和 Github Action 库编译没有本质的区别，需要的准备工作都是 OpenWrt 和 luci 包的源码，自己需要包含的app列表，预加载的文件等。</p>
+<p>不过 Github 有良好的网络环境，这是国内不具备的，所以优势还是很明显的。</p>
+
+        </div>
+        <div class="top-div">
+          <ol class="top-box"><li class="top-box-item top-box-level-2"><a class="top-box-link" href="#%E5%87%86%E5%A4%87"><span class="top-box-text">准备</span></a><ol class="top-box-child"><li class="top-box-item top-box-level-3"><a class="top-box-link" href="#OpenWrt-%E5%BA%93"><span class="top-box-text">OpenWrt 库</span></a></li></ol></li><li class="top-box-item top-box-level-2"><a class="top-box-link" href="#%E8%BD%AF%E4%BB%B6%E5%8C%85"><span class="top-box-text">软件包</span></a></li><li class="top-box-item top-box-level-2"><a class="top-box-link" href="#%E7%BC%96%E8%AF%91"><span class="top-box-text">编译</span></a><ol class="top-box-child"><li class="top-box-item top-box-level-3"><a class="top-box-link" href="#%E6%9C%AC%E5%9C%B0Ubuntu-%E6%A8%A1%E5%BC%8F"><span class="top-box-text">本地Ubuntu 模式</span></a></li><li class="top-box-item top-box-level-3"><a class="top-box-link" href="#Github-%E7%BC%96%E8%AF%91%E6%A8%A1%E5%BC%8F"><span class="top-box-text">Github 编译模式</span></a></li></ol></li><li class="top-box-item top-box-level-2"><a class="top-box-link" href="#%E6%80%BB%E7%BB%93"><span class="top-box-text">总结</span></a></li></ol>
+        </div>
+      </div>
+    </div>
+
+    
+      <div class="next-post">
+        <a class="purple-link" href="/2022/11/07/Ultra-Mobile-Pay-as-You-Go-WIFI-Calling-Activation-in-China/">
+          <h3 class="post-title">
+            下一篇：Ultra Mobile Pay as You Go 在中国激活 WIFI Calling
+          </h3>
+        </a>
+      </div>
+    
+  </div>
+
+
+
+
+<footer>
+<div class="site-footer">
+  <div class="social-container">
+    
+      
+        <a href="https://github.com/f-dong" target="_blank">
+          <i class="icon icon-github"></i>
+        </a>
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+  
+    Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> <a href="https://github.com/f-dong/hexo-theme-minimalism" target="_blank">Theme</a>
+  
+  
+  
+  
+  
+  
+</div>
+</footer>
+
+
+      </div>
+      
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/jquery.fancybox.min.js"></script>
+
+
+
+    <script>window.is_post = true;</script>
+
+
+<script src="/js/main.js"></script>
+
+
+
+
+
+    </div>
+  </body>
+</html>
+
