@@ -27,13 +27,13 @@
 <meta property="og:site_name" content="Myblog">
 <meta property="og:description" content="本文介绍两种OpenWrt固件编译的方式，分别是本地 Ubuntu VM 编译和 Github Action 编译。 本文以 Lean 和 Kenzok8 的库为基础进行编译，编译过程选择了一些自己常用软件包，并加了一些自己的配置文件。本地编译流程按照 Lean 的说明，Github Action 编译按照 P3TERX 的说明。 两种方式没有本质的区别，区别在于，一个是本地编译，需要一台 Ubu">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://burndown.github.io/assets/image-20220804161745057.png">
-<meta property="og:image" content="https://burndown.github.io/assets/image-20220804161722115.png">
+<meta property="og:image" content="https://burndown.github.io/images/image-20220804161745057.png">
+<meta property="og:image" content="https://burndown.github.io/images/image-20220804161722115.png">
 <meta property="article:published_time" content="2022-11-09T01:20:58.000Z">
-<meta property="article:modified_time" content="2022-11-09T01:26:07.533Z">
+<meta property="article:modified_time" content="2022-11-09T01:33:05.754Z">
 <meta property="article:author" content="burndown">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://burndown.github.io/assets/image-20220804161745057.png">
+<meta name="twitter:image" content="https://burndown.github.io/images/image-20220804161745057.png">
 
 <link rel="canonical" href="https://burndown.github.io/2022/11/09/Openwrt-Build/">
 
@@ -177,7 +177,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2022-11-09 01:20:58 / 修改时间：01:26:07" itemprop="dateCreated datePublished" datetime="2022-11-09T01:20:58+00:00">2022-11-09</time>
+              <time title="创建时间：2022-11-09 01:20:58 / 修改时间：01:33:05" itemprop="dateCreated datePublished" datetime="2022-11-09T01:20:58+00:00">2022-11-09</time>
             </span>
 
           
@@ -230,7 +230,7 @@
 <li>可以在lede 文件夹下创建 files，把自己想预加载的配置文件放进去，但是我这次没有尝试</li>
 </ul>
 <p>漫长的等待后，就可以去 ~&#x2F;lede&#x2F;bin&#x2F;targets&#x2F;x86&#x2F;64 下看到编译好的固件了。</p>
-<p><img src="/assets/image-20220804161745057.png" alt="image-20220804161745057"></p>
+<p><img src="/images/image-20220804161745057.png" alt="image-20220804161745057"></p>
 <h3 id="Github-编译模式"><a href="#Github-编译模式" class="headerlink" title="Github 编译模式"></a>Github 编译模式</h3><p>编译过程按照 P3TERX 的<a target="_blank" rel="noopener" href="https://p3terx.com/archives/build-openwrt-with-github-actions.html">说明</a></p>
 <p>简明步骤如下：</p>
 <ol>
@@ -244,7 +244,7 @@
 </li>
 <li><p>不用执行 <strong>update-checker</strong></p>
 <p>漫长的等待后，就可以去 Action 页面下载编译好的固件了。</p>
-<p><img src="/assets/image-20220804161722115.png" alt="image-20220804161722115"></p>
+<p><img src="/images/image-20220804161722115.png" alt="image-20220804161722115"></p>
 </li>
 </ol>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>Ubuntu VM 编译和 Github Action 库编译没有本质的区别，需要的准备工作都是 OpenWrt 和 luci 包的源码，自己需要包含的app列表，预加载的文件等。</p>
