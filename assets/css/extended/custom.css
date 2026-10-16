@@ -1,0 +1,4 @@
+.post-content p,
+.post-content li {
+  text-wrap: pretty;
+}

@@ -1,0 +1,44 @@
+baseURL = "https://burndown.github.io/"
+locale = "zh-CN"
+defaultContentLanguage = "zh"
+hasCJKLanguage = true
+title = "burndown 的折腾记"
+theme = "PaperMod"
+enableRobotsTXT = true
+
+[pagination]
+  pagerSize = 10
+
+[params]
+  description = "折腾 ESP32 的记录，和读到的好文章的中文导读。"
+  defaultTheme = "auto"
+  ShowReadingTime = true
+  ShowPostNavLinks = true
+  ShowCodeCopyButtons = true
+  ShowToc = false
+  DateFormat = "2006-01-02"
+  [params.homeInfoParams]
+    Title = "burndown 的折腾记"
+    Content = "折腾 ESP32 的记录，和读到的好文章的中文导读。"
+
+[languages.zh]
+  label = "中文"
+  weight = 1
+  [[languages.zh.menus.main]]
+    name = "分类"
+    pageRef = "/categories"
+    weight = 10
+  [[languages.zh.menus.main]]
+    name = "归档"
+    pageRef = "/archives"
+    weight = 20
+  [[languages.zh.menus.main]]
+    name = "搜索"
+    pageRef = "/search"
+    weight = 30
+
+[outputs]
+  home = ["HTML", "RSS", "JSON"]
+
+[markup.goldmark.renderer]
+  unsafe = false
