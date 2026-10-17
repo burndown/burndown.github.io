@@ -41,4 +41,4 @@ DOMAIN-SUFFIX,metaivm.com
 - 添加了接收文本的能力。
     这里比较有意思，Gadgets 支持什么能力是需要让 Muse 知道的，Muse 知道后才能使用这个能力。之前圆圆只能在问问题的时候才能接收文本，Muse 不能从远端主动发一堆文字给圆圆。代码需要添加文字接收能力，然后通知 Muse，Muse 才会发文字过来。每个设备都能宣称自己拥有什么能力，Muse 会根据你支持的能力来发指令过来，比如方方连了家里的 Home Assistant，他向 Muse 注册的时候告诉 Muse，我能控制家里的灯，那么我让 Muse 关客厅灯，Muse 就会把指令发给方方
 
-云端的 Personal Agent 算一个缸中之脑，Gadgets 设备相对于一个嘴巴，虽然有 web，有 app，但是我还是挺喜欢用这个设备和 Muse 对话，按下按键说话，等着回复。让我有一种老派的和个人助理<span style="white-space:nowrap">对话的感觉。</span>
+云端的 Personal Agent 算一个缸中之脑，Gadgets 设备是一个嘴巴，虽然有 web，有 app，但是我还是挺喜欢用这个设备，按下按键说话，等着回复。让我有一种老派的和个人助理对话的感觉，我喜欢。
