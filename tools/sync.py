@@ -103,19 +103,53 @@ def space_line(line):
     return "".join(out)
 
 
+NOWRAP_NAMES = ["Muse Gadgets", "Claude Code", "Home Assistant", "Personal Agent",
+                "Gadgets Token", "Opus 5.5", "Sonnet 5.5"]
+NOWRAP_RE = re.compile("|".join(re.escape(n) for n in NOWRAP_NAMES))
+
+
+# Short final phrases that would otherwise leave a two-character last line on a phone.
+# Static copy only: a phrase that is no longer in the text is simply skipped.
+TAIL_PROTECT = ["干正事，刷机。", "也只能这样了。", "对话的感觉。"]
+
+
+def protect_tails(line):
+    for t in TAIL_PROTECT:
+        if line.endswith(t):
+            line = line[: -len(t)] + f'<span style="white-space:nowrap">{t}</span>'
+    return line
+
+
+def keep_names_together(line):
+    """Join the words of product names with a no-break space, outside code and link targets."""
+    parts = re.split(r"(`[^`]*`|\]\([^)]*\)|<[^>]+>)", line)
+    return "".join(
+        p if i % 2 else NOWRAP_RE.sub(lambda m: m.group().replace(" ", "\u00a0"), p)
+        for i, p in enumerate(parts)
+    )
+
+
 def space_markdown(text):
-    out, fence = [], False
+    out, fence, in_list = [], False, False
     for line in text.split("\n"):
         if line.lstrip().startswith("```"):
             fence = not fence
             out.append(line)
-        elif fence or line.startswith("    ") or line.lstrip().startswith("<"):
+            continue
+        is_bullet = bool(re.match(r"\s*(?:[-*+]|\d+\.)\s+", line))
+        if line.strip() and not line.startswith(" ") and not is_bullet:
+            in_list = False
+        elif is_bullet:
+            in_list = True
+        # Lines indented under a list item continue that item; they are prose, not code.
+        indented_code = line.startswith("    ") and not in_list
+        if fence or indented_code or line.lstrip().startswith("<"):
             out.append(line)
         else:
             # Keep list bullets, quote markers and heading hashes out of the
             # emphasis scan ("* item" is a bullet, not an opening "*").
             prefix = re.match(r"(\s*(?:>\s?)*(?:[-*+]\s+|\d+\.\s+|#+\s+)?)", line).group(1)
-            out.append(prefix + space_line(line[len(prefix):]))
+            out.append(prefix + protect_tails(keep_names_together(space_line(line[len(prefix):]))))
     return "\n".join(out)
 
 
