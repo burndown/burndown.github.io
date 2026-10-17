@@ -157,8 +157,8 @@ def convert_images(text, src_file, dest_dir):
         return f"![{alt}]({export_image(locate(target.strip()), dest_dir)})"
 
     def local(m):
-        if re.match(r"https?://", m.group(2)):
-            return m.group(0)
+        if re.match(r"https?://", m.group(2)) or (dest_dir / m.group(2)).exists():
+            return m.group(0)  # remote, or already exported by the embed pass
         return f"![{m.group(1)}]({export_image(locate(m.group(2)), dest_dir)})"
 
     text = re.sub(r"!\[\[([^\]]+)\]\]", embed, text)
