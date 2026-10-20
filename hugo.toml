@@ -2,7 +2,7 @@ baseURL = "https://burndown.github.io/"
 locale = "zh-CN"
 defaultContentLanguage = "zh"
 hasCJKLanguage = true
-title = "burndown 的折腾记"
+title = "黑高折腾记"
 theme = "PaperMod"
 enableRobotsTXT = true
 
@@ -18,7 +18,7 @@ enableRobotsTXT = true
   ShowToc = false
   DateFormat = "2006-01-02"
   [params.homeInfoParams]
-    Title = "burndown 的折腾记"
+    Title = "黑高折腾记"
     Content = "折腾 ESP32 的记录，和读到的好文章的中文导读。"
 
 [languages.zh]
