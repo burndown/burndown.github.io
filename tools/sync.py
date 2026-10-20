@@ -25,6 +25,7 @@ VAULT = Path(os.environ.get("VAULT", "~/Documents/ai_workspace")).expanduser()
 SOURCES = {
     VAULT / "writing" / "esp32": "ESP32",
     VAULT / "writing" / "read": "导读",
+    VAULT / "writing" / "running": "跑步",
 }
 ROOT = Path(__file__).resolve().parent.parent
 POSTS = ROOT / "content" / "posts"
