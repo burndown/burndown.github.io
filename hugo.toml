@@ -13,7 +13,8 @@ enableRobotsTXT = true
   description = "折腾 ESP32 的记录，和读到的好文章的中文导读。"
   defaultTheme = "auto"
   ShowReadingTime = true
-  ShowPostNavLinks = true
+  ShowPostNavLinks = false
+  ShowBreadCrumbs = false
   ShowCodeCopyButtons = true
   ShowToc = false
   DateFormat = "2006-01-02"
@@ -42,3 +43,14 @@ enableRobotsTXT = true
 
 [markup.goldmark.renderer]
   unsafe = true
+
+[related]
+  includeNewer = true
+  threshold = 0
+  toLower = false
+  [[related.indices]]
+    name = "categories"
+    weight = 100
+  [[related.indices]]
+    name = "date"
+    weight = 10

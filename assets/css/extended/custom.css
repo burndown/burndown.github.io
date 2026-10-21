@@ -1,4 +1,233 @@
+/* Quiet, paper-like look in the spirit of stephango.com, written from scratch.
+   Colors: Flexoki by Steph Ango (MIT), https://github.com/kepano/flexoki */
+
+:root {
+  --main-width: 600px;
+  --nav-width: 600px;
+  --header-height: 56px;
+  --gap: 20px;
+  --radius: 4px;
+  --theme: #FFFCF0;        /* paper */
+  --entry: #FFFCF0;
+  --primary: #100F0F;      /* black */
+  --secondary: #6F6E69;    /* base-600 */
+  --tertiary: #CECDC3;     /* base-200 */
+  --content: #100F0F;
+  --code-block-bg: #F2F0E5; /* base-50 */
+  --code-bg: #F2F0E5;
+  --border: #E6E4D9;       /* base-100 */
+}
+
+:root[data-theme="dark"] {
+  --theme: #100F0F;
+  --entry: #100F0F;
+  --primary: #CECDC3;      /* base-200 */
+  --secondary: #878580;    /* base-500 */
+  --tertiary: #403E3C;     /* base-800 */
+  --content: #CECDC3;
+  --code-block-bg: #1C1B1A; /* base-950 */
+  --code-bg: #1C1B1A;
+  --border: #282726;       /* base-900 */
+}
+
+body,
+.list,
+[data-theme="dark"] .list {
+  background: var(--theme);
+}
+
+body {
+  font-size: 16px;
+}
+
+/* ---------- header: one quiet line ---------- */
+
+.nav {
+  font-size: 15px;
+}
+
+.logo a {
+  font-size: 15px;
+  font-weight: 500;
+}
+
+#menu a {
+  font-size: 15px;
+  color: var(--secondary);
+}
+
+#menu a:hover,
+#menu .active {
+  color: var(--primary);
+  border-bottom: 0;
+}
+
+/* ---------- links: underline, no colour ---------- */
+
+.post-content a,
+.related a,
+.home-info a {
+  color: var(--primary);
+  box-shadow: none;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  text-decoration-color: var(--tertiary);
+}
+
+.post-content a:hover,
+.related a:hover {
+  text-decoration-color: var(--primary);
+}
+
+/* ---------- article ---------- */
+
+.post-header {
+  margin: 40px auto 28px;
+}
+
+.post-title {
+  font-size: 28px;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.post-description {
+  margin-top: 10px;
+  color: var(--secondary);
+  font-size: 16px;
+}
+
+.post-meta {
+  margin-top: 6px;
+  font-size: 14px;
+}
+
+.post-content {
+  color: var(--content);
+  font-size: 16px;
+  line-height: 1.8;
+}
+
 .post-content p,
 .post-content li {
   text-wrap: pretty;
+}
+
+.post-content p {
+  margin-bottom: 1.1em;
+}
+
+.post-content h2 {
+  font-size: 20px;
+  margin: 2em 0 0.6em;
+}
+
+.post-content h3 {
+  font-size: 17px;
+}
+
+.post-content blockquote {
+  border-inline-start: 2px solid var(--tertiary);
+  color: var(--secondary);
+}
+
+.post-content img {
+  border-radius: var(--radius);
+}
+
+.post-footer {
+  margin-top: 40px;
+}
+
+/* ---------- 你可能也喜欢 ---------- */
+
+.related {
+  margin-top: 48px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+  font-size: 15px;
+}
+
+.related h2 {
+  margin-bottom: 10px;
+  color: var(--secondary);
+  font-size: 15px;
+  font-weight: 400;
+}
+
+.related ul {
+  padding-inline-start: 1.2em;
+}
+
+.related li {
+  margin: 4px 0;
+}
+
+/* ---------- home: plain list of titles and dates ---------- */
+
+.home-info {
+  min-height: 0;
+  margin: 40px 0 28px;
+  padding: 0;
+  border: 0;
+  background: none;
+}
+
+.home-info .entry-header h1 {
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.home-info .entry-content {
+  color: var(--secondary);
+  font-size: 15px;
+}
+
+.post-entry:not(.home-info) {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  margin: 0;
+  padding: 7px 0;
+  border: 0;
+  border-bottom: 1px solid var(--border);
+  border-radius: 0;
+  background: none;
+  transition: none;
+}
+
+.post-entry:not(.home-info):hover,
+.post-entry:not(.home-info):focus-within {
+  transform: none;
+}
+
+.post-entry:not(.home-info) .entry-header h2 {
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+.post-entry:not(.home-info):hover .entry-header h2 {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.post-entry:not(.home-info) .entry-content {
+  display: none;
+}
+
+.post-entry:not(.home-info) .entry-footer {
+  flex-shrink: 0;
+  color: var(--secondary);
+  font-size: 14px;
+}
+
+.page-header h1 {
+  font-size: 22px;
+}
+
+.footer {
+  font-size: 13px;
 }

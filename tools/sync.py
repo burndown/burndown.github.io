@@ -198,9 +198,20 @@ def convert_images(text, src_file, dest_dir):
 
     text = re.sub(r"!\[\[([^\]]+)\]\]", embed, text)
     text = re.sub(r"!\[([^\]]*)\]\(([^)\s]+)\)", local, text)
-    text = re.sub(r"\[\[([^\]|]+)\|([^\]]+)\]\]", r"\2", text)
-    text = re.sub(r"\[\[([^\]]+)\]\]", r"\1", text)
     return text
+
+
+def convert_wikilinks(text, links):
+    """[[note]] / [[note|text]] / [[note#heading]]: a link when note is a
+    published article (by file name or title), plain text otherwise."""
+    def repl(m):
+        target, _, label = m.group(1).partition("|")
+        note = target.split("#", 1)[0].strip()
+        label = label.strip() or note
+        slug = links.get(note)
+        return f"[{label}](/posts/{slug}/)" if slug else label
+
+    return re.sub(r"(?<!!)\[\[([^\]]+)\]\]", repl, text)
 
 
 # ---------- articles ----------
@@ -247,13 +258,18 @@ def main():
                 shutil.rmtree(d)
                 print(f"  删除 {d.name}")
 
+    links = {}
+    for meta, _, f, _ in found:
+        links[f.stem] = meta["slug"]
+        links[meta.get("title", f.stem)] = meta["slug"]
+
     for meta, body, f, category in found:
         d = POSTS / meta["slug"]
         if d.exists():
             shutil.rmtree(d)
         d.mkdir(parents=True)
         (d / ".synced").write_text(str(f.relative_to(VAULT)) + "\n")
-        body = space_markdown(convert_images(body, f, d))
+        body = space_markdown(convert_wikilinks(convert_images(body, f, d), links))
         title = pangu.space_text(meta.get("title", f.stem))
         fm = [
             "---",

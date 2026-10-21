@@ -1,0 +1,25 @@
+{{- /* 你可能也喜欢: related posts first (same category, near in date), then
+       the newest other posts, up to 8 links. Pages without a section (search,
+       archives) get nothing. */ -}}
+{{- if eq .Section "posts" }}
+{{- $others := where (where site.RegularPages "Section" "posts") "Permalink" "ne" .Permalink }}
+{{- /* Built by hand: intersect and union re-sort Pages and lose the ranking. */ -}}
+{{- $list := slice }}
+{{- range where (site.RegularPages.Related .) "Section" "posts" }}
+{{- $list = $list | append . }}
+{{- end }}
+{{- range $others.ByDate.Reverse }}
+{{- if not (in $list .) }}{{ $list = $list | append . }}{{ end }}
+{{- end }}
+{{- $list = first 8 $list }}
+{{- with $list }}
+<nav class="related" aria-label="你可能也喜欢">
+  <h2>你可能也喜欢</h2>
+  <ul>
+    {{- range . }}
+    <li><a href="{{ .RelPermalink }}">{{ .Title }}</a></li>
+    {{- end }}
+  </ul>
+</nav>
+{{- end }}
+{{- end }}
