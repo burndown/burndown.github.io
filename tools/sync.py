@@ -26,6 +26,7 @@ SOURCES = {
     VAULT / "writing" / "esp32": "ESP32",
     VAULT / "writing" / "read": "导读",
     VAULT / "writing" / "running": "跑步",
+    VAULT / "writing" / "网络拾遗": "网络拾遗",
 }
 ROOT = Path(__file__).resolve().parent.parent
 POSTS = ROOT / "content" / "posts"
@@ -269,6 +270,8 @@ def main():
             shutil.rmtree(d)
         d.mkdir(parents=True)
         (d / ".synced").write_text(str(f.relative_to(VAULT)) + "\n")
+        # Hugo shows the title already; drop a leading "# title" heading.
+        body = re.sub(r"\A#\s+" + re.escape(meta.get("title", f.stem)) + r"\s*\n+", "", body.lstrip())
         body = space_markdown(convert_wikilinks(convert_images(body, f, d), links))
         title = pangu.space_text(meta.get("title", f.stem))
         fm = [

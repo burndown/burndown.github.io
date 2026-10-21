@@ -23,3 +23,13 @@
 </nav>
 {{- end }}
 {{- end }}
+{{- /* Mermaid: load the renderer only on pages that have a ```mermaid block
+       (see _markup/render-codeblock-mermaid.html). Not in the footer: PaperMod
+       caches the footer across pages. */ -}}
+{{- if .Store.Get "hasMermaid" }}
+<script type="module">
+  import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.esm.min.mjs";
+  const dark = document.documentElement.dataset.theme === "dark";
+  mermaid.initialize({ startOnLoad: true, theme: dark ? "dark" : "neutral" });
+</script>
+{{- end }}
